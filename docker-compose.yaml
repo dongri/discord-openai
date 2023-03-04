@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  discord-openai:
+    image: rust:1.67.0
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: cargo run
