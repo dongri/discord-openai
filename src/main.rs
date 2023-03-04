@@ -3,13 +3,14 @@ use std::env;
 
 use openai_api_rs::v1::api::Client as OpenaiClient;
 use openai_api_rs::v1::chat_completion::{self, ChatCompletionRequest};
+use openai_api_rs::v1::error::APIError;
 use serenity::{
     async_trait,
     model::{channel::Message, gateway::Ready},
     prelude::*,
 };
 
-async fn openai(text: String) -> Result<String, std::io::Error> {
+async fn openai(text: String) -> Result<String, APIError> {
     let openai_api_key = get_env("OPENAI_TOKEN");
     let client = OpenaiClient::new(openai_api_key);
     let req = ChatCompletionRequest {
@@ -36,7 +37,7 @@ impl EventHandler for Handler {
                 println!("Error sending message: {why:?}");
             }
         }
-        if msg.content.starts_with("!ai") {
+        if msg.content.starts_with("!ai ") {
             let text = msg.content.split(' ').nth(1).unwrap_or("").to_string();
 
             let result = openai(text).await;
