@@ -71,8 +71,8 @@ impl EventHandler for Handler {
         if msg.content.starts_with("!ai ") {
             let text = msg.content.split(' ').nth(1).unwrap_or("").to_string();
             let mut list = get_from_map(msg.channel_id.into());
-            let result = openai(text, list.clone()).await;
-            let text = match result {
+            let result = openai(text.clone(), list.clone()).await;
+            let ai_text = match result {
                 Ok(text) => text,
                 Err(e) => format!("Error: {e:?}"),
             };
@@ -81,7 +81,7 @@ impl EventHandler for Handler {
             }
             list.push(text.clone());
             set_to_map(msg.channel_id.into(), list);
-            if let Err(why) = msg.channel_id.say(&ctx.http, text).await {
+            if let Err(why) = msg.channel_id.say(&ctx.http, ai_text).await {
                 println!("Error sending message: {why:?}");
             }
         }
