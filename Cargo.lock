@@ -157,6 +157,7 @@ name = "discord-openai"
 version = "0.1.1"
 dependencies = [
  "dotenv",
+ "lazy_static",
  "openai-api-rs",
  "serenity",
  "tokio",
